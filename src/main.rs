@@ -1,6 +1,6 @@
 use chrono::Utc;
 use hyper::service::{make_service_fn, service_fn};
-use hyper::{Body, Request, Response, Server};
+use hyper::{Body, Request, Response, Server, StatusCode};
 use std::collections::HashMap;
 use std::convert::Infallible;
 use std::fs::OpenOptions;
@@ -35,7 +35,9 @@ async fn hello(request: Request<Body>) -> Result<Response<Body>, Infallible> {
         eprintln!("Couldn't write to file: {}", e);
     }
     println!("REQUEST: {:?}", line);
-    Ok(Response::new(Body::from("")))
+
+    let response = Response::builder().status(StatusCode::OK).body(Body::from(""));
+    Ok(response.unwrap())
 }
 
 #[tokio::main]
@@ -53,7 +55,9 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     let addr = ([0, 0, 0, 0], 80).into();
 
-    let server = Server::bind(&addr).http1_keepalive(false).serve(make_svc);
+    let server = Server::bind(&addr)
+    .http1_keepalive(false)
+    .serve(make_svc);
 
     println!("Listening on http://{}", addr);
 
