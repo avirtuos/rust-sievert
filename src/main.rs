@@ -53,7 +53,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     let addr = ([0, 0, 0, 0], 80).into();
 
-    let server = Server::bind(&addr).serve(make_svc);
+    let server = Server::bind(&addr).http1_keepalive(false).serve(make_svc);
 
     println!("Listening on http://{}", addr);
 
