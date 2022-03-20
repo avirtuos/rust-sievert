@@ -53,19 +53,22 @@ async fn hello(request: Request<Body>) -> Result<Response<Body>, Infallible> {
     let acpm = params.get("ACPM").unwrap().parse::<f64>().unwrap();
     let usv = params.get("uSV").unwrap().parse::<f64>().unwrap();
 
+    let measurement = "sievert";
+    let location = "home";
+
     let points = vec![
-        DataPoint::builder("sievert")
-            .tag("location", "home")
+        DataPoint::builder(measurement.clone())
+            .tag("location", location.clone())
             .field("cpm", F64(cpm))
             .build()
             .unwrap(),
-        DataPoint::builder("cpu")
-            .tag("location", "home")
+        DataPoint::builder(measurement.clone())
+            .tag("location", location.clone())
             .field("acpm", F64(acpm))
             .build()
             .unwrap(),
-        DataPoint::builder("cpu")
-            .tag("location", "home")
+        DataPoint::builder(measurement.clone())
+            .tag("location", location.clone())
             .field("usv", F64(usv))
             .build()
             .unwrap(),
